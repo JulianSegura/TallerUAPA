@@ -18,6 +18,18 @@ def GetMarcasActivas():
 
 def GetModelosPorMarca(marca):
     dbReader=sqlite3.connect(dbPath).cursor()
-    Modelos=dbReader.execute("select * from Modelos where MarcaId=" + marca).fetchall()
+    Modelos=dbReader.execute("select * from Modelos where MarcaId=" + str(marca)).fetchall()
     dbReader.close()
     return Modelos
+
+def ConsultaOSCliente(orden):
+    dbReader=sqlite3.connect(dbPath).cursor()
+    Orden_Servicio=dbReader.execute("select * from ConsultaOSUsuario where OrdenId=" + str(orden)).fetchall()
+    dbReader.close()
+
+    if len(Orden_Servicio)> 0:
+        return Orden_Servicio[0]
+    # else:
+    #     return None
+
+    
