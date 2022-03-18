@@ -88,7 +88,7 @@
                 <input type="submit" class="btn btn-primary" value="Consultar">
               </div>
               <div class="form-group col-lg-12">
-                {%if DatosConsulta=='firsttime'%}
+                {%if DatosConsulta=='emptyQuery'%}
                 {% elif DatosConsulta is none %}
                 <h2 style="color:red">Orden de servicio no encontrada</h2>
                 <h3>Intente otravez o pongase en <a href="/contacto">contacto</a> con nosotros</h3>
@@ -97,7 +97,9 @@
                 <h2>Marca:   {{DatosConsulta[1]}}</h2>
                 <h2>Modelo:  {{DatosConsulta[2]}}</h2>
                 <h2>Detalle Revision: {{DatosConsulta[4]}}</h2>
-                <h2>Monto: {{DatosConsulta[5]}}</h2>
+                <h2>Trabajo A Realizar: {{DatosConsulta[5]}} </h2>
+                <h2>Monto: {{ "RD${:,.2f}".format(DatosConsulta[6])}}</h2>
+                <p>El monto incluye la mano de obra. En caso de no aprobar la reparacion, debe pagar el monto de RD$1,000.00 por la revision.</p>
                 {% endif %}
               </div>
           </form>

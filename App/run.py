@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request, url_for
 import db
 
 
@@ -8,7 +8,7 @@ app=Flask(__name__)
 #Index
 @app.route("/", methods=['GET','POST'])
 def Index():
-    OSQueryResult="firsttime"
+    OSQueryResult="emptyQuery"
     if request.method=='POST' and 'txtOrdenServicio' in request.form:
         NumeroOrden=request.form['txtOrdenServicio']
         if NumeroOrden != "":
@@ -16,17 +16,28 @@ def Index():
 
     return render_template("tallerindex.html",DatosConsulta=OSQueryResult)
 
-@app.route("/login")
+@app.route("/login", methods=['GET','POST'])
 def Login():
-    Marcas=db.GetAllMarcas()
-    detalleMarcas=""
-    if Marcas:
-        detalleMarcas="<table>"
-        for marca in Marcas:
-            detalleMarcas=detalleMarcas+"<tr><td>"+marca[1]+"</td></tr>"
-        detalleMarcas=detalleMarcas+"</table>"
+    LoginResults=""
+    if request.method=='POST' and 'txtUsuario' and 'txtPassword' in request.form:
+        validInfo=request.form['txtUsuario']!="" and request.form['txtPassword']!=""
+        if not validInfo: 
+            LoginResults="Credenciales Invalidos"
+        else:
+            loginInfo=request.form['txtUsuario'],request.form['txtPassword']
+            LoginResults=db.Login(loginInfo)
+    
+    if LoginResults and LoginResults[2]=="Admin": return redirect(url_for('Admin'))
+    elif LoginResults and LoginResults[2]=="Mecanico": return redirect(url_for('Taller'))
+    else: return render_template("login.html",LoggedUser=LoginResults)
 
-    return "Login para ingresar al sistema "+detalleMarcas
+@app.route("/taller")
+def Taller():
+    return "Pagina de personal de taller"
+
+@app.route("/admin")
+def Admin():
+    return render_template("admin.html")
 
 
 @app.route("/contacto")

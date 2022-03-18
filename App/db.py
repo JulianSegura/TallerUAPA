@@ -18,18 +18,30 @@ def GetMarcasActivas():
 
 def GetModelosPorMarca(marca):
     dbReader=sqlite3.connect(dbPath).cursor()
-    Modelos=dbReader.execute("select * from Modelos where MarcaId=" + str(marca)).fetchall()
+    Modelos=dbReader.execute(f"select * from Modelos where MarcaId='{str(marca)}'").fetchall()
     dbReader.close()
     return Modelos
 
 def ConsultaOSCliente(orden):
     dbReader=sqlite3.connect(dbPath).cursor()
-    Orden_Servicio=dbReader.execute("select * from ConsultaOSUsuario where OrdenId=" + str(orden)).fetchall()
+    Orden_Servicio=dbReader.execute(f"select * from ConsultaOSUsuario where OrdenId='{str(orden)}'").fetchone()
     dbReader.close()
 
-    if len(Orden_Servicio)> 0:
-        return Orden_Servicio[0]
-    # else:
-    #     return None
+    if Orden_Servicio:
+        return Orden_Servicio
 
+def GetUsuario(username):
     
+    dbReader=sqlite3.connect(dbPath).cursor()
+    usuariodb=dbReader.execute(f"select * from consultausuariosactivos where usuario='{str(username)}'").fetchone()
+    dbReader.close()
+
+    return usuariodb
+
+def Login(loginInfo):
+    #ToDo: ver como hacer un hash de la contraseña
+    usuariodb=GetUsuario(loginInfo[0])
+    if usuariodb != None and usuariodb[3]==loginInfo[1]:
+        return (usuariodb[0],usuariodb[1],usuariodb[4])
+    else:
+        return None
