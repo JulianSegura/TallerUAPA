@@ -143,10 +143,12 @@
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
-        <!-- Small boxes (Stat box) -->
+        <!-- Boton Nueva Orden -->
         <div class="row col-lg-12">
           <div class="small-box">
-            <button type="button" class="btn btn-success float-left"><i class="fas fa-plus"></i> Nueva Orden De Servicio</button>
+            <button type="button" class="btn btn-success float-left" data-toggle="modal" data-target="#modal-Nueva-OS">
+              <i class="fas fa-plus"></i> Nueva Orden De Servicio
+            </button>
           </div>
         </div>
         <!-- /.row -->
@@ -175,6 +177,9 @@
                 <table class="table table-hover text-nowrap">
                   <thead>
                     <tr>
+                      <th>No. Orden</th>
+                      <th>Fecha Entrada</th>
+                      <th>Dias En Taller</th>
                       <th>Cliente</th>
                       <th>Telefono</th>
                       <th>Marca</th>
@@ -222,15 +227,189 @@
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
-
-
-
         </div>
         <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
   </div>
+
+  <!--Modal para nueva orden de servicio-->
+  <div class="modal fade" id="modal-Nueva-OS">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Nueva Orden De Servicio</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!--Aqui va el form para los datos de la orden de servicio-->
+          <p>Aqui va el form para la nueva OS&hellip;</p>
+
+          <div class="card card-warning">
+            <!-- /.card-header -->
+            <div class="card-body">
+              <form>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <!-- text input -->
+                    <div class="form-group">
+                      <label>Text</label>
+                      <input type="text" class="form-control" placeholder="Enter ...">
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Text Disabled</label>
+                      <input type="text" class="form-control" placeholder="Enter ..." disabled>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <!-- textarea -->
+                    <div class="form-group">
+                      <label>Textarea</label>
+                      <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Textarea Disabled</label>
+                      <textarea class="form-control" rows="3" placeholder="Enter ..." disabled></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- input states -->
+                <div class="form-group">
+                  <label class="col-form-label" for="inputSuccess"><i class="fas fa-check"></i> Input with
+                    success</label>
+                  <input type="text" class="form-control is-valid" id="inputSuccess" placeholder="Enter ...">
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label" for="inputWarning"><i class="far fa-bell"></i> Input with
+                    warning</label>
+                  <input type="text" class="form-control is-warning" id="inputWarning" placeholder="Enter ...">
+                </div>
+                <div class="form-group">
+                  <label class="col-form-label" for="inputError"><i class="far fa-times-circle"></i> Input with
+                    error</label>
+                  <input type="text" class="form-control is-invalid" id="inputError" placeholder="Enter ...">
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-6">
+                    <!-- checkbox -->
+                    <div class="form-group">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox">
+                        <label class="form-check-label">Checkbox</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" checked>
+                        <label class="form-check-label">Checkbox checked</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" disabled>
+                        <label class="form-check-label">Checkbox disabled</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <!-- radio -->
+                    <div class="form-group">
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radio1">
+                        <label class="form-check-label">Radio</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="radio1" checked>
+                        <label class="form-check-label">Radio checked</label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" disabled>
+                        <label class="form-check-label">Radio disabled</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-6">
+                    <!-- select -->
+                    <div class="form-group">
+                      <label>Select</label>
+                      <select class="form-control">
+                        <option>option 1</option>
+                        <option>option 2</option>
+                        <option>option 3</option>
+                        <option>option 4</option>
+                        <option>option 5</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Select Disabled</label>
+                      <select class="form-control" disabled>
+                        <option>option 1</option>
+                        <option>option 2</option>
+                        <option>option 3</option>
+                        <option>option 4</option>
+                        <option>option 5</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-6">
+                    <!-- Select multiple-->
+                    <div class="form-group">
+                      <label>Select Multiple</label>
+                      <select multiple class="form-control">
+                        <option>option 1</option>
+                        <option>option 2</option>
+                        <option>option 3</option>
+                        <option>option 4</option>
+                        <option>option 5</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <label>Select Multiple Disabled</label>
+                      <select multiple class="form-control" disabled>
+                        <option>option 1</option>
+                        <option>option 2</option>
+                        <option>option 3</option>
+                        <option>option 4</option>
+                        <option>option 5</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <!-- /.card-body -->
+          </div>
+
+
+
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success">Guardar</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
   <!-- /.content-wrapper -->
   <footer class="main-footer">
     Derechos Reservados <strong>&copy; Julian/Dionicio/Francelis.</strong>
