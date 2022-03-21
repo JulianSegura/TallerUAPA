@@ -17,14 +17,24 @@
   <link rel="stylesheet" href="{{url_for('static', filename='plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
   <!-- JQVMap -->
   <link rel="stylesheet" href="{{url_for('static', filename='plugins/jqvmap/jqvmap.min.css')}}">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="{{url_for('static', filename='dist/css/adminlte.min.css')}}">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{url_for('static', filename='plugins/select2/css/select2.min.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="{{url_for('static', filename='plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="{{url_for('static', filename='plugins/daterangepicker/daterangepicker.css')}}">
-  <!-- summernote -->
-  <link rel="stylesheet" href="{{url_for('static', filename='plugins/summernote/summernote-bs4.min.css')}}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{url_for('static', filename='dist/css/adminlte.min.css')}}">
+  <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='img/favicon.ico')}}">
+  <!--Show flashed messages-->
+  {% with messages=get_flashed_messages()%}
+    {% if messages%}
+      {% for msg in messages%}
+        <script>
+          alert('{{msg}}');
+        </script>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -58,7 +68,9 @@
           <img src="{{url_for('static', filename='dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
         </div> -->
         <div class="info">
-          <a href="#" class="d-block">Nombre de usuario</a>
+          <a href="#" class="d-block">
+            {{ session['UserName'] }} - {{ session['UserProfile'] }}
+          </a>
         </div>
       </div>
 
@@ -74,7 +86,9 @@
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Ordenes De Servicio
-                <span class="right badge badge-warning">Qty</span>
+                <span class="right badge badge-warning">
+                  {{ 'Qty' if OrdenesServicio is none else OrdenesServicio|length }}
+                </span>
               </p>
             </a>
           </li>
@@ -161,7 +175,7 @@
                 <h3 class="card-title">Detalle Ordenes De Servicio</h3>
 
                 <div class="card-tools">
-                  <div class="input-group input-group-sm" style="width: 150px;">
+                  <div class="input-group input-group-sm" style="width: 250px;">
                     <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
 
                     <div class="input-group-append">
@@ -189,38 +203,21 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>183</td>
-                      <td>John Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-success">Approved</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                      <td>Aqui va algo.... KLK</td>
-                    </tr>
-                    <tr>
-                      <td>219</td>
-                      <td>Alexander Pierce</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-warning">Pending</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                      <td>Aqui va el segundo algo.... KLK</td>
-                    </tr>
-                    <tr>
-                      <td>657</td>
-                      <td>Bob Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-primary">Approved</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                      <td>3</td>
-                    </tr>
-                    <tr>
-                      <td>175</td>
-                      <td>Mike Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-danger">Denied</span></td>
-                      <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                      <td>4</td>
-                    </tr>
+                    {% if OrdenesServicio is not none %}
+                      {% for OrdenServicio in OrdenesServicio %}
+                        <tr>
+                          <td>{{OrdenServicio[0]}}</td>
+                          <td>{{OrdenServicio[1]}}</td>
+                          <td>{{OrdenServicio[2]}}</td>
+                          <td>{{OrdenServicio[3]}}</td>
+                          <td>{{OrdenServicio[4]}}</td>
+                          <td>{{OrdenServicio[5]}}</td>
+                          <td>{{OrdenServicio[6]}}</td>
+                          <td>{{OrdenServicio[7]}}</td>
+                          <td>{{OrdenServicio[8]}}</td>
+                        </tr>
+                      {% endfor %}
+                    {% endif %}
                   </tbody>
                 </table>
               </div>
@@ -232,182 +229,6 @@
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
-  </div>
-
-  <!--Modal para nueva orden de servicio-->
-  <div class="modal fade" id="modal-Nueva-OS">
-    <div class="modal-dialog modal-md">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title">Nueva Orden De Servicio</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <!--Aqui va el form para los datos de la orden de servicio-->
-          <p>Aqui va el form para la nueva OS&hellip;</p>
-
-          <div class="card card-warning">
-            <!-- /.card-header -->
-            <div class="card-body">
-              <form>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <!-- text input -->
-                    <div class="form-group">
-                      <label>Text</label>
-                      <input type="text" class="form-control" placeholder="Enter ...">
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="form-group">
-                      <label>Text Disabled</label>
-                      <input type="text" class="form-control" placeholder="Enter ..." disabled>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <!-- textarea -->
-                    <div class="form-group">
-                      <label>Textarea</label>
-                      <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="form-group">
-                      <label>Textarea Disabled</label>
-                      <textarea class="form-control" rows="3" placeholder="Enter ..." disabled></textarea>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- input states -->
-                <div class="form-group">
-                  <label class="col-form-label" for="inputSuccess"><i class="fas fa-check"></i> Input with
-                    success</label>
-                  <input type="text" class="form-control is-valid" id="inputSuccess" placeholder="Enter ...">
-                </div>
-                <div class="form-group">
-                  <label class="col-form-label" for="inputWarning"><i class="far fa-bell"></i> Input with
-                    warning</label>
-                  <input type="text" class="form-control is-warning" id="inputWarning" placeholder="Enter ...">
-                </div>
-                <div class="form-group">
-                  <label class="col-form-label" for="inputError"><i class="far fa-times-circle"></i> Input with
-                    error</label>
-                  <input type="text" class="form-control is-invalid" id="inputError" placeholder="Enter ...">
-                </div>
-
-                <div class="row">
-                  <div class="col-sm-6">
-                    <!-- checkbox -->
-                    <div class="form-group">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox">
-                        <label class="form-check-label">Checkbox</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" checked>
-                        <label class="form-check-label">Checkbox checked</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" disabled>
-                        <label class="form-check-label">Checkbox disabled</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <!-- radio -->
-                    <div class="form-group">
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="radio1">
-                        <label class="form-check-label">Radio</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="radio1" checked>
-                        <label class="form-check-label">Radio checked</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" disabled>
-                        <label class="form-check-label">Radio disabled</label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-sm-6">
-                    <!-- select -->
-                    <div class="form-group">
-                      <label>Select</label>
-                      <select class="form-control">
-                        <option>option 1</option>
-                        <option>option 2</option>
-                        <option>option 3</option>
-                        <option>option 4</option>
-                        <option>option 5</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="form-group">
-                      <label>Select Disabled</label>
-                      <select class="form-control" disabled>
-                        <option>option 1</option>
-                        <option>option 2</option>
-                        <option>option 3</option>
-                        <option>option 4</option>
-                        <option>option 5</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-sm-6">
-                    <!-- Select multiple-->
-                    <div class="form-group">
-                      <label>Select Multiple</label>
-                      <select multiple class="form-control">
-                        <option>option 1</option>
-                        <option>option 2</option>
-                        <option>option 3</option>
-                        <option>option 4</option>
-                        <option>option 5</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="form-group">
-                      <label>Select Multiple Disabled</label>
-                      <select multiple class="form-control" disabled>
-                        <option>option 1</option>
-                        <option>option 2</option>
-                        <option>option 3</option>
-                        <option>option 4</option>
-                        <option>option 5</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <!-- /.card-body -->
-          </div>
-
-
-
-        </div>
-        <div class="modal-footer justify-content-between">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-success">Guardar</button>
-        </div>
-      </div>
-      <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
   </div>
 
   <!-- /.content-wrapper -->
@@ -426,6 +247,86 @@
 </div>
 <!-- ./wrapper -->
 
+<!--Modal para nueva orden de servicio-->
+<div class="modal fade" id="modal-Nueva-OS">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Nueva Orden De Servicio</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card card-warning">
+          <!-- /.card-header -->
+          <div class="card-body">
+            <form method="post" name="form-Nueva-OS">
+              <div class="row" id="Customer_Info">
+                <div class="col-sm-6">
+                  <!-- text input -->
+                  <label for="txtNombreCliente">Nombre Cliente</label>
+                  <input type="text" class="form-control" name="txtNombreCliente">
+                </div>
+                <div class="col-sm-6">
+                  <!-- text input -->
+                  <label for="txtTelefonoCliente">Telefono Cliente</label>
+                  <input type="text" class="form-control" name="txtTelefonoCliente">
+                </div>
+              </div>
+              <br>
+              <div class="row" id="Vehicle_Info">
+                <div class="col-sm-6">
+                  <label for="cmbMarca">Marca</label>
+                  <select class="form-control select2" id="cmbMarca" name="cmbMarca" style="width: 100%;" onchange="getModels()">
+                    {% if marcas is not none %}
+                      {% for marca in marcas %}
+                      <option value="{{marca[0]}}">{{marca[1]}}</option>
+                      {% endfor %}
+                    {% endif %}
+                  </select>
+                </div>
+                <div class="col-sm-6">
+                  <label for="cmbModelo">Modelo</label>
+                  <select class="form-control select2" id="cmbModelo" name="cmbModelo" style="width: 100%;">
+                  </select>
+                </div>
+                
+                <div class="col-sm-6">
+                  <!-- text input -->
+                  <label for="txtAno">Año</label>
+                  <input type="text" class="form-control" name="txtAno">
+                </div>
+                <div class="col-sm-6">
+                  <!-- text input -->
+                  <label for="txtChasis">Chasis</label>
+                  <input type="text" class="form-control" name="txtChasis">
+                </div>
+                  
+                <div class="col-lg-12">
+                  <div class="form-group">
+                    <label for="txtReportedFailure">Falla Reportada</label>
+                    <textarea class="form-control" rows="4" name="txtReportedFailure" placeholder="Detalles de lo reportado por el cliente"></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row" id="Buttons">
+                <div class="col-lg-12">
+                  <button type="submit" class="btn btn-success col-5 float-right" >Guardar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- /.card-body -->
+        </div>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
 <!-- jQuery -->
 <script src="{{url_for('static', filename='plugins/jquery/jquery.min.js')}}"></script>
 <!-- jQuery UI 1.11.4 -->
@@ -436,18 +337,41 @@
 </script>
 <!-- Bootstrap 4 -->
 <script src="{{url_for('static', filename='plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-<!-- daterangepicker -->
-<script src="{{url_for('static', filename='plugins/moment/moment.min.js')}}"></script>
-<script src="{{url_for('static', filename='plugins/daterangepicker/daterangepicker.js')}}"></script>
+<!-- Select2 -->
+<script src="{{url_for('static', filename='plugins/select2/js/select2.full.min.js')}}"></script>
 <!-- Tempusdominus Bootstrap 4 -->
 <script src="{{url_for('static', filename='plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')}}"></script>
-<!-- Summernote -->
-<script src="{{url_for('static', filename='plugins/summernote/summernote-bs4.min.js')}}"></script>
 <!-- overlayScrollbars -->
 <script src="{{url_for('static', filename='plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{url_for('static', filename='dist/js/adminlte.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{url_for('static', filename='dist/js/pages/dashboard.js')}}"></script>
+
+<script>
+  $(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2()
+  })
+
+  //Configure brand-models dropdown interactivity
+  function getModels(){
+    var marcaseleccionada=document.getElementById("cmbMarca").value;
+    var modelo_selector=document.getElementById('cmbModelo');
+    
+    fetch('/models/' + marcaseleccionada).then(function(response){
+
+      response.json().then(function(data){
+
+        var modelosHTML="";
+
+        for(var model of data.models){
+          modelosHTML += '<option value="' + model.modelId + '">' + model.modelName +'</option>'
+        }
+        modelo_selector.innerHTML=modelosHTML;
+      });
+    });
+  }
+</script>
 </body>
 </html>

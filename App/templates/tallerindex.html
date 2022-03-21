@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="{{url_for('static', filename='plugins/fontawesome-free/css/all.min.css')}}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{url_for('static', filename='dist/css/adminlte.min.css')}}">
+  <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='img/favicon.ico')}}">
 </head>
 <body class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
@@ -85,7 +86,7 @@
                 <textarea id="inputMessage" class="form-control" rows="4"></textarea>
               </div> -->
               <div class="form-group col-lg-5">
-                <input type="submit" class="btn btn-primary" value="Consultar">
+                <button type="submit" class="btn btn-primary">Consultar</button>
               </div>
               <div class="form-group col-lg-12">
                 {%if DatosConsulta=='emptyQuery'%}

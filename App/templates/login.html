@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="{{url_for('static', filename='plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{url_for('static', filename='dist/css/adminlte.min.css')}}">
+  <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='img/favicon.ico')}}">
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
@@ -57,19 +58,17 @@
           <!-- /.col -->
         </div>
 
-        {% if LoggedUser=="Credenciales Invalidos" %}
+        {% if Results=="Credenciales Invalidos" %}
         <div class="alert alert-warning" role="alert">
-          Usuario y contraseña son obligatorios
+          {{Results}}
         </div>
-        {% elif LoggedUser is none %}
+        {% elif Results is none %}
         <!--Usuario no existe o esta inactivo-->
         <div class="alert alert-danger" role="alert">
           Usuario no encontrado, verifique sus credenciales
         </div>
         {% endif %}
-
       </form>
-
       <p class="mb-1">
         <a href="#">Olvide mi contraseña</a>
       </p>
