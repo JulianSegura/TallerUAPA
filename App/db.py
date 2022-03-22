@@ -1,4 +1,5 @@
 import datetime
+from lib2to3.pgen2.token import DOUBLESTAREQUAL
 import sqlite3
 
 #connect database
@@ -42,6 +43,14 @@ def GetAllOrdenesServicio():
     if Ordenes_Servicio:
         return list(Ordenes_Servicio)
 
+def GetOrdenesServicioEnTaller():
+    dbReader=sqlite3.connect(dbPath).cursor()
+    Ordenes_Servicio=dbReader.execute("select * from ConsultaOSEnTaller").fetchall()
+    dbReader.close()
+
+    if Ordenes_Servicio:
+        return list(Ordenes_Servicio)
+
 def CreateServiceOrder(OSrequest):   
     insert_params=""
     for param in OSrequest:
@@ -51,14 +60,46 @@ def CreateServiceOrder(OSrequest):
     
     conn=sqlite3.connect(dbPath,isolation_level=None)
     dbCursor=conn.cursor()
+    before=dbCursor.rowcount
     with conn:
         dbCursor.execute(insert_query)
+        conn.commit()
+    after=dbCursor.rowcount
+    dbCursor.close()
+    conn.close()
+
+    return after>before
+
+def UpdateDiagnose(order_id,diagnose,amount):
+    if not diagnose or not amount: return False
+    update_query=f"UPDATE OrdenesServicio SET Diagnostico = '{str(diagnose)}', Estado = 'Esperando Autorizacion' WHERE OrdenId = '{str(order_id)}';"
+    insert_query=f"INSERT INTO Cotizaciones (FechaCotizacion,OrdenServicioId,Monto,Estado, DetalleCotizacion) VALUES ('{str(datetime.datetime.now())}','{str(order_id)}','{amount}','Esperando Autorizacion','{str(diagnose)}');"
+    conn=sqlite3.connect(dbPath,isolation_level=None)
+    dbCursor=conn.cursor()
+    before=dbCursor.rowcount
+    with conn:
+        dbCursor.execute(update_query)
+        dbCursor.execute(insert_query)
+        conn.commit()
+    after=dbCursor.rowcount
+    dbCursor.close()
+    conn.close()
+
+    return after>before
+
+def UpdateRepair(order_id,repair):
+    if not repair: return False
+    update_query=f"UPDATE OrdenesServicio SET Reparacion = '{str(repair)}', Estado = 'Reparado' WHERE OrdenId = '{str(order_id)}';"
+    print(update_query)
+    conn=sqlite3.connect(dbPath,isolation_level=None)
+    dbCursor=conn.cursor()
+    with conn:
+        dbCursor.execute(update_query)
         conn.commit()
     dbCursor.close()
     conn.close()
 
-    created=True
-    if created:return True
+    return True
 
 def GetUsuario(username):
     dbReader=sqlite3.connect(dbPath).cursor()

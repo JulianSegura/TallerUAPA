@@ -13,13 +13,13 @@ app.permanent_session_lifetime=timedelta(minutes=10)
 def Index():
     if request.method=='POST' and 'txtOrdenServicio' in request.form:
         NumeroOrden=request.form['txtOrdenServicio']
-        if NumeroOrden == "": return render_template("tallerindex.html",DatosConsulta="emptyQuery")
+        if NumeroOrden == "": return render_template("index.html",DatosConsulta="emptyQuery")
         OSQueryResult=db.GetOSCliente(NumeroOrden)
-        return render_template("tallerindex.html",DatosConsulta=OSQueryResult)
+        return render_template("index.html",DatosConsulta=OSQueryResult)
         
     else:
         #Jinja is not letting me clear the cache so i need to send the variable as empty
-        return render_template("tallerindex.html",DatosConsulta="emptyQuery")
+        return render_template("index.html",DatosConsulta="emptyQuery")
 
 
 #Login Page
@@ -52,7 +52,7 @@ def Login():
     else:
         return render_template("login.html")
 
-#Admin Page
+#Admin Region
 @app.route("/admin", methods=['GET','POST'])
 def Admin():
     if not session or session['UserProfile'] != "Admin":
@@ -80,7 +80,6 @@ def GetOrdenesServicio():
         ordenesToReturn.append(orden)
     return ordenesToReturn
 
-#Register Service Order
 def RegisterOS():
     OSRequest=(request.form['txtNombreCliente'],request.form['txtTelefonoCliente'],request.form.get('cmbMarca'),request.form.get('cmbModelo'),
     request.form['txtAno'],request.form['txtChasis'],request.form['txtReportedFailure'])
@@ -102,12 +101,55 @@ def ModelsByBrand(marcaid):
         modelsToReturn.append(modelobj)
     return jsonify({'models':modelsToReturn})
 
-#Taller Page
-@app.route("/taller")
+#End Admin Region
+
+
+#Taller Region
+@app.route("/taller",methods=['GET','POST'])
 def Taller():
-    if not session or session['UserProfile']!="Mecanico":
+    if not session or session['UserProfile'] != "Mecanico":
         return redirect(url_for('Login'))
-    return "Pagina de personal de taller"
+    if request.method == 'GET': 
+        ordenes=GetOrdenesTaller()
+        return render_template("taller.html",OrdenesServicio=ordenes)
+    else:
+        return UpdateOS()
+    
+def GetOrdenesTaller():
+    ordenes=[]
+    ordenes_servicio_taller=db.GetOrdenesServicioEnTaller()
+    for orden in ordenes_servicio_taller:
+        result=[]
+        if orden[6]=="Para Revisar":
+             result=list(orden)
+             result.append("Registrar Dianostico")
+        elif orden[6]=="Para Reparar": 
+            result=list(orden)
+            result.append("Registrar Reparacion")
+        else: 
+            result=list(orden)
+            result.append("Entregar A Cliente")
+        ordenes.append(result)
+    return ordenes
+
+def UpdateOS():
+    if 'txtTechFailure' in request.form:
+        #Grabar diagnostico
+        order_id=request.form['txtOrder']
+        diagnose=request.form['txtTechFailure']
+        amount=request.form['txtQuotationAmount']
+        update_result=db.UpdateDiagnose(order_id,diagnose,amount)
+    else:
+        order_id=request.form['txtOrder']
+        repair=request.form['txtRepair']
+        update_result=db.UpdateRepair(order_id,repair)
+    if update_result: 
+        flash("Orden De Servicio Actualizada Correctamente")
+        return redirect(url_for('Taller'))
+    else:
+        return "No se guardo...."
+
+#End Taller Region
 
 #Contact Page
 @app.route("/contacto")

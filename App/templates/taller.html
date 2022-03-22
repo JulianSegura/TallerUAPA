@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Taller UAPA | Administracion</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{{url_for('static', filename='plugins/fontawesome-free/css/all.min.css')}}">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="{{url_for('static', filename='plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="{{url_for('static', filename='plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="{{url_for('static', filename='plugins/jqvmap/jqvmap.min.css')}}">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{url_for('static', filename='plugins/select2/css/select2.min.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="{{url_for('static', filename='plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{url_for('static', filename='dist/css/adminlte.min.css')}}">
+  <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='img/favicon.ico')}}">
+  <!--Show flashed messages-->
+  {% with messages=get_flashed_messages()%}
+    {% if messages%}
+      {% for msg in messages%}
+        <script>
+          alert('{{msg}}');
+        </script>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+  <!-- Preloader -->
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+    </ul>
+    <!-- Right navbar links -->
+  </nav>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="#" class="brand-link">
+      <img src="{{url_for('static', filename='img/Small_Logo.jpg')}}" alt="Taller UAPA Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light">Taller UAPA</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <!-- <div class="image">
+          <img src="{{url_for('static', filename='dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
+        </div> -->
+        <div class="info">
+          <a href="#" class="d-block">
+            {{ session['UserName'] }} - {{ session['UserProfile'] }}
+          </a>
+        </div>
+      </div>
+
+      <!-- SidebarSearch Form -->
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item">
+            <a href="/admin" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Ordenes De Servicio
+                <span class="right badge badge-warning">
+                  {{ 'Qty' if OrdenesServicio is none else OrdenesServicio|length }}
+                </span>
+              </p>
+            </a>
+          </li>
+          <!-- <li class="nav-header">EXAMPLES</li> -->
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Vehiculos En Taller</h1>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <!-- /.row -->
+        <!-- Main row -->
+        <div class="row col-lg-12">
+          
+          <!-- Service Orders Details -->
+            <div class="card col-lg-12">
+              <div class="card-header">
+                <!-- <h3 class="card-title">Detalle Ordenes De Servicio</h3> -->
+
+                <div class="card-tools">
+                  <div class="input-group input-group-sm" style="width: 250px;">
+                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                    <div class="input-group-append">
+                      <button type="submit" class="btn btn-default">
+                        <i class="fas fa-search"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap">
+                  <thead>
+                    <tr>
+                      <th>No. Orden</th>
+                      <th>Cliente</th>
+                      <th>Telefono</th>
+                      <th>Marca</th>
+                      <th>Modelo</th>
+                      <th>Falla Reportada</th>
+                      <th>Estado</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if OrdenesServicio %}
+                      {% for OrdenServicio in OrdenesServicio %}
+                        <tr>
+                          <td>{{OrdenServicio[0]}}</td>
+                          <td>{{OrdenServicio[1]}}</td>
+                          <td>{{OrdenServicio[2]}}</td>
+                          <td>{{OrdenServicio[3]}}</td>
+                          <td>{{OrdenServicio[4]}}</td>
+                          <td>{{OrdenServicio[5]}}</td>
+                          <td>{{OrdenServicio[6]}}</td>
+                          <td><button type="button" class="btn btn-info float-left" value="{{OrdenServicio[7]}}" id="{{OrdenServicio[0]}}" onclick="openModal(value,id)">{{OrdenServicio[7]}}</button></td>
+                        </tr>
+                      {% endfor %}
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.row (main row) -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+
+  <!-- /.content-wrapper -->
+  <footer class="main-footer">
+    Derechos Reservados <strong>&copy; Julian/Dionicio/Francelis.</strong>
+    <div class="float-right d-none d-sm-inline-block">
+      <b>Version</b> 1.0.0
+    </div>
+  </footer>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!--Modal para Diagnostico-->
+<div class="modal fade" id="modal-Registrar-Diagnostico">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Registrar Diagnostico</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card card-warning">
+          <!-- /.card-header -->
+          <div class="card-body">
+            <form method="post" name="form-Diagnostico">
+              <div class="row" id="Diagnose-Info">
+                <input type="text" id="txtOrderDiagnose" name="txtOrder" hidden>
+                <div class="col-lg-12">
+                  <div class="form-group">
+                    <label for="txtTechFailure">Detalle De Diagnostico</label>
+                    <textarea class="form-control" rows="3" name="txtTechFailure" placeholder="Diagnostico y/o reparacion a realizar..."></textarea>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <label for="txtQuotationAmount">Monto Cotizacion</label>
+                  <input type="text" class="form-control" name="txtQuotationAmount" placeholder="Costo de piezas y mano de obra...">
+                </div>
+              </div>
+              <br>
+              <div class="row" id="Buttons">
+                <div class="col-lg-12">
+                  <button type="submit" name="form-Diagnostico" class="btn btn-success col-4 float-left" >Guardar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- /.card-body -->
+        </div>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
+<!--Modal para Reparacion-->
+<div class="modal fade" id="modal-Registrar-Reparacion">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Registrar Reparacion</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card card-warning">
+          <!-- /.card-header -->
+          <div class="card-body">
+            <form method="post" name="form-Reparacion">
+              <input type="text" id="txtOrderRepair" name="txtOrder" hidden>
+              <div class="row" id="Repair_Info">   
+                <div class="col-lg-12">
+                  <div class="form-group">
+                    <label for="txtRepair">Reparacion Realizada</label>
+                    <textarea class="form-control" rows="3" name="txtRepair" placeholder="Detalles de la reparacion realizada"></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row" id="Buttons">
+                <div class="col-lg-12">
+                  <button type="submit" name="form-Reparacion" class="btn btn-success col-5 float-right" >Guardar</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- /.card-body -->
+        </div>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
+<!-- jQuery -->
+<script src="{{url_for('static', filename='plugins/jquery/jquery.min.js')}}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="{{url_for('static', filename='plugins/jquery-ui/jquery-ui.min.js')}}"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button)
+</script>
+<!-- Bootstrap 4 -->
+<script src="{{url_for('static', filename='plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+<!-- Select2 -->
+<script src="{{url_for('static', filename='plugins/select2/js/select2.full.min.js')}}"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="{{url_for('static', filename='plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')}}"></script>
+<!-- overlayScrollbars -->
+<script src="{{url_for('static', filename='plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
+<!-- AdminLTE App -->
+<script src="{{url_for('static', filename='dist/js/adminlte.js')}}"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="{{url_for('static', filename='dist/js/pages/dashboard.js')}}"></script>
+
+<script>
+  $(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2()
+  })
+
+  //Configure brand-models dropdown interactivity
+  function getModels(){
+    var marcaseleccionada=document.getElementById("cmbMarca").value;
+    var modelo_selector=document.getElementById('cmbModelo');
+    
+    fetch('/models/' + marcaseleccionada).then(function(response){
+
+      response.json().then(function(data){
+
+        var modelosHTML="";
+
+        for(var model of data.models){
+          modelosHTML += '<option value="' + model.modelId + '">' + model.modelName +'</option>'
+        }
+        modelo_selector.innerHTML=modelosHTML;
+      });
+    });
+  }
+
+  function openModal(value,order){
+    switch(value){
+      case "Registrar Dianostico":
+        $("#modal-Registrar-Diagnostico").modal();
+        document.getElementById('txtOrderDiagnose').value=order;
+        break;
+      case "Registrar Reparacion":
+        $("#modal-Registrar-Reparacion").modal();
+        document.getElementById('txtOrderRepair').value=order;
+        break;
+      case "Entregar A Cliente":
+        $("#modal-Registrar-Entrega").modal();
+        break;
+      default:
+    };
+    
+  }
+</script>
+</body>
+</html>
