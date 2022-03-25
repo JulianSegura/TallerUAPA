@@ -340,7 +340,12 @@
         document.getElementById('txtOrderRepair').value=order;
         break;
       case "Entregar A Cliente":
-        $("#modal-Registrar-Entrega").modal();
+        fetch('/taller/entrega/'+order).then(function(response){
+          response.json().then(function(data){
+            alert(data.result)
+            window.location.reload();
+          });
+        });
         break;
       default:
     };

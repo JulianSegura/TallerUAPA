@@ -149,6 +149,16 @@ def UpdateOS():
     else:
         return "No se guardo...."
 
+@app.route("/taller/entrega/<orden_id>")
+def Entrega_Orden_Servicio(orden_id):
+    result=db.Entregar_Orden_Servicio(orden_id)
+    return_obj={}
+    if result:
+        return_obj["result"]="Se Ha Entregado El Vehiculo"
+    else:
+        return_obj["result"]="No Se Ha Podido Procesar"
+    return jsonify(return_obj)
+
 #End Taller Region
 
 #Contact Page

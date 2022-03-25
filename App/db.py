@@ -1,5 +1,6 @@
 import datetime
 from lib2to3.pgen2.token import DOUBLESTAREQUAL
+from operator import truediv
 import sqlite3
 
 #connect database
@@ -90,7 +91,6 @@ def UpdateDiagnose(order_id,diagnose,amount):
 def UpdateRepair(order_id,repair):
     if not repair: return False
     update_query=f"UPDATE OrdenesServicio SET Reparacion = '{str(repair)}', Estado = 'Reparado' WHERE OrdenId = '{str(order_id)}';"
-    print(update_query)
     conn=sqlite3.connect(dbPath,isolation_level=None)
     dbCursor=conn.cursor()
     with conn:
@@ -99,6 +99,18 @@ def UpdateRepair(order_id,repair):
     dbCursor.close()
     conn.close()
 
+    return True
+
+def Entregar_Orden_Servicio(orden_id):
+    if not orden_id: return False
+    update_query=f"update ordenesservicio set estado='Entregado' where ordenid='{str(orden_id)}';"
+    conn=sqlite3.connect(dbPath,isolation_level=None)
+    dbCursor=conn.cursor()
+    with conn:
+        dbCursor.execute(update_query)
+        conn.commit()
+    dbCursor.close()
+    conn.close()
     return True
 
 def GetUsuario(username):
